@@ -1,0 +1,348 @@
+/* ==========================================================================
+   Conference Pulse - design tokens & base styles
+   Palette: deep control-room navy + amber (data) / teal (live) signals.
+   Display type: Space Grotesk. Body: IBM Plex Sans. Data/mono: IBM Plex Mono.
+   ========================================================================== */
+
+:root {
+  --bg: #08152c;
+  --bg-raised: #0d1d38;
+  --surface: #102544;
+  --surface-2: #152f52;
+  --border: #284d75;
+  --border-soft: #1b3a60;
+
+  --text-h: #f6f7ff;
+  --text: #d8e6f4;
+  --text-muted: #91a8c2;
+  --text-dim: #667f9d;
+
+  --amber: #ee4bd8;
+  --amber-soft: rgba(238, 75, 216, 0.16);
+  --teal: #62d8f2;
+  --teal-soft: rgba(98, 216, 242, 0.14);
+  --rose: #ff718f;
+  --rose-soft: rgba(255, 113, 143, 0.14);
+
+  --display: "Space Grotesk", var(--sans);
+  --sans: "IBM Plex Sans", system-ui, "Segoe UI", Roboto, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+
+  --radius-s: 8px;
+  --radius: 14px;
+  --radius-l: 22px;
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+  font: 16px/1.55 var(--sans);
+  color-scheme: dark;
+  color: var(--text);
+  background: var(--bg);
+  transition: background 0.35s var(--ease), color 0.35s var(--ease);
+}
+
+/* light mode override, toggled via [data-theme="light"] on <html> */
+:root[data-theme="light"] {
+  --bg: #eef2f6;
+  --bg-raised: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #f3f6f9;
+  --border: #d9e1e8;
+  --border-soft: #e4eaf0;
+
+  --text-h: #101d2b;
+  --text: #2b3a48;
+  --text-muted: #5c6f80;
+  --text-dim: #8b9baa;
+
+  --amber-soft: rgba(238, 75, 216, 0.12);
+  --teal-soft: rgba(98, 216, 242, 0.12);
+  --rose-soft: rgba(255, 113, 143, 0.12);
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse 900px 500px at 15% -10%, rgba(238, 75, 216, 0.10), transparent 60%),
+    radial-gradient(ellipse 800px 600px at 100% 0%, rgba(98, 216, 242, 0.08), transparent 55%),
+    var(--bg);
+  transition: background 0.35s var(--ease);
+}
+
+/* custom cursor: hide the native pointer on fine-pointer devices only
+   (CustomCursor component checks matchMedia before mounting, this is the
+   CSS half of that gate) */
+body.custom-cursor-active, body.custom-cursor-active * {
+  cursor: none !important;
+}
+body.custom-cursor-active input,
+body.custom-cursor-active textarea {
+  cursor: text !important;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+* { box-sizing: border-box; }
+
+h1, h2, h3, h4 {
+  font-family: var(--display);
+  color: var(--text-h);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+p { margin: 0; }
+
+a { color: inherit; }
+
+button, input, textarea {
+  font-family: inherit;
+  color: inherit;
+}
+
+/* faint graph-paper texture used behind hero / panels */
+.grid-texture {
+  background-image:
+    linear-gradient(rgba(234, 240, 246, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(234, 240, 246, 0.035) 1px, transparent 1px);
+  background-size: 34px 34px;
+}
+
+/* custom scrollbar to match the terminal aesthetic */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 8px;
+}
+*::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+
+/* ---------- motion ---------- */
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.45; transform: scale(0.82); }
+}
+
+@keyframes drawLine {
+  from { stroke-dashoffset: var(--dash, 1000); }
+  to   { stroke-dashoffset: 0; }
+}
+
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+}
+.reveal.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.page-transition {
+  animation: rise 0.5s var(--ease);
+}
+
+/* magnetic nav / button hover glow */
+.glow-hover {
+  position: relative;
+  transition: transform 0.35s var(--ease), border-color 0.35s var(--ease), background 0.35s var(--ease);
+}
+.glow-hover:hover {
+  transform: translateY(-2px);
+}
+
+::selection {
+  background: var(--amber-soft);
+  color: var(--text-h);
+}
+
+/* ===== Globe-inspired visual refresh: deep navy, electric blue, cyan + magenta ===== */
+:root {
+  --bg: #08152c;
+  --bg-raised: #0d1d38;
+  --surface: #102544;
+  --surface-2: #152f52;
+  --border: #284d75;
+  --border-soft: #1b3a60;
+  --text-h: #f6f7ff;
+  --text: #d8e6f4;
+  --text-muted: #91a8c2;
+  --text-dim: #667f9d;
+  --amber: #ee4bd8;       /* magenta accent from the globe */
+  --amber-soft: rgba(238, 75, 216, .16);
+  --teal: #62d8f2;        /* cyan accent from the globe */
+  --teal-soft: rgba(98, 216, 242, .14);
+  --rose: #ff718f;
+  --rose-soft: rgba(255, 113, 143, .14);
+}
+:root[data-theme="light"] {
+  --bg: #eef5fb;
+  --bg-raised: #ffffff;
+  --surface: #f8fbff;
+  --surface-2: #e8f1fb;
+  --border: #bfd0e2;
+  --border-soft: #d7e3ef;
+  --text-h: #10213d;
+  --text: #233955;
+  --text-muted: #607a96;
+  --text-dim: #8aa0b8;
+  --amber: #d73cc5;
+  --amber-soft: rgba(215,60,197,.12);
+  --teal: #1689bd;
+  --teal-soft: rgba(22,137,189,.11);
+}
+html { scroll-behavior: auto; }
+body {
+  background:
+    radial-gradient(900px 560px at 12% -10%, rgba(31,126,190,.24), transparent 62%),
+    radial-gradient(800px 520px at 92% 4%, rgba(238,75,216,.20), transparent 58%),
+    radial-gradient(760px 620px at 52% 115%, rgba(98,216,242,.09), transparent 65%),
+    var(--bg);
+}
+body:before {
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:-1;
+  background-image:linear-gradient(rgba(138,196,255,.028) 1px, transparent 1px),
+    linear-gradient(90deg,rgba(138,196,255,.028) 1px, transparent 1px);
+  background-size:44px 44px;
+}
+.site-header {
+  position:sticky; top:0; z-index:40; display:flex; align-items:center; justify-content:space-between;
+  padding:14px 30px; border-bottom:1px solid rgba(98,216,242,.12);
+  background:rgba(8,21,44,.78); backdrop-filter:blur(20px);
+  box-shadow:0 12px 35px rgba(2,8,24,.24);
+}
+.brand{display:flex;align-items:center;gap:11px;border:0;background:transparent;cursor:pointer;font:600 15px var(--display);color:var(--text-h)}
+.brand i{font-style:normal;color:var(--amber)}
+.main-nav{display:flex;gap:4px;padding:4px;border:1px solid rgba(98,216,242,.16);border-radius:999px;background:rgba(9,25,51,.64);box-shadow:inset 0 1px rgba(255,255,255,.035),0 10px 28px rgba(2,8,24,.18)}
+.main-nav button{border:1px solid transparent;background:transparent;color:var(--text-muted);padding:8px 15px;border-radius:999px;cursor:pointer;transition:.28s var(--ease);font-size:12px}
+.main-nav small{color:var(--teal);margin-right:7px;font-size:13px;transition:color .28s var(--ease)}
+.main-nav button:hover{background:rgba(33,70,113,.72);color:var(--text-h);box-shadow:0 8px 18px rgba(0,0,0,.18)}
+.main-nav button.active{background:linear-gradient(135deg,rgba(21,68,115,.96),rgba(46,33,94,.96));color:var(--text-h);border-color:rgba(98,216,242,.30);box-shadow:inset 0 1px rgba(255,255,255,.10),0 8px 22px rgba(9,3,35,.28)}
+.main-nav button.active small{color:#8be9ff;text-shadow:0 0 12px rgba(98,216,242,.75)}
+.status{font:10px var(--mono);letter-spacing:.12em;color:var(--text-muted);display:flex;align-items:center;gap:7px}.status span{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 18px var(--teal);animation:pulseDot 2s infinite}
+.grid-texture{background-image:none!important}
+.grid-texture:after{display:none!important}
+.page-transition{animation:rise .5s var(--ease)}
+[style*="background: var(--surface)"],[style*="background: \"var(--surface)\""]{box-shadow:0 20px 55px rgba(2,8,24,.22), inset 0 1px rgba(255,255,255,.025)}
+[style*="background: var(--bg-raised)"],[style*="background: \"var(--bg-raised)\""]{box-shadow:0 14px 36px rgba(2,8,24,.20), inset 0 1px rgba(255,255,255,.02)}
+.glow-hover:hover{transform:translateY(-3px);filter:brightness(1.08);box-shadow:0 12px 28px rgba(2,8,24,.24)}
+button{transition:transform .25s var(--ease),background .25s var(--ease),border-color .25s var(--ease),box-shadow .25s var(--ease)}
+textarea,input{border-radius:14px!important}
+textarea:focus,input:focus{outline:1px solid var(--teal)!important;box-shadow:0 0 0 5px var(--teal-soft),0 14px 30px rgba(2,8,24,.16)}
+.home-globe{align-self:center;justify-self:end;width:min(100%,440px)!important;filter:drop-shadow(0 30px 45px rgba(238,75,216,.18)) drop-shadow(0 18px 36px rgba(31,126,190,.22))}
+.conference-globe{display:block;width:100%;height:auto;object-fit:cover;border-radius:20px;box-shadow:0 24px 70px rgba(3,7,25,.38),0 0 0 1px rgba(98,216,242,.14);animation:globeFloat 7s ease-in-out infinite}
+@keyframes globeFloat{50%{transform:translateY(-10px) scale(1.012)}}
+@media(max-width:860px){.home-globe{display:none!important}}
+@media(max-width:700px){.site-header{padding:12px 16px;gap:10px}.status{display:none}.main-nav{order:3;width:100%;justify-content:center;overflow-x:auto}.main-nav button{padding:8px 10px}.main-nav button.active{box-shadow:inset 0 1px rgba(255,255,255,.08),0 6px 16px rgba(9,3,35,.20)}}
+
+/* ===== Second visual pass: distributed atmosphere, transparent globe, no heavy top/bottom vignette ===== */
+body {
+  background:
+    radial-gradient(720px 460px at 8% 12%, rgba(29, 117, 188, .16), transparent 68%),
+    radial-gradient(620px 420px at 92% 28%, rgba(238, 75, 216, .11), transparent 70%),
+    radial-gradient(520px 420px at 28% 64%, rgba(98, 216, 242, .055), transparent 72%),
+    radial-gradient(700px 500px at 82% 82%, rgba(119, 57, 185, .08), transparent 72%),
+    var(--bg);
+}
+.app-shell { position: relative; isolation: isolate; overflow: hidden; min-height: 100vh; }
+.app-shell::before,
+.app-shell::after {
+  content: "";
+  position: fixed;
+  pointer-events: none;
+  z-index: -1;
+  border-radius: 50%;
+  filter: blur(1px);
+}
+.app-shell::before {
+  width: 420px; height: 420px; left: -210px; top: 42vh;
+  background: radial-gradient(circle, rgba(98,216,242,.10), rgba(98,216,242,0) 70%);
+}
+.app-shell::after {
+  width: 460px; height: 460px; right: -230px; top: 62vh;
+  background: radial-gradient(circle, rgba(238,75,216,.09), rgba(238,75,216,0) 72%);
+}
+/* Give sections subtle depth without a heavy page-wide top/bottom shadow. */
+main > div > section { position: relative; }
+main > div > section::before {
+  content: ""; position: absolute; inset: 12% 8%; pointer-events: none; z-index: -1;
+  background: radial-gradient(ellipse at center, rgba(72, 146, 226, .035), transparent 68%);
+}
+.home-globe {
+  width: min(100%, 430px) !important;
+  padding: 0 !important;
+  background: transparent !important;
+  filter: drop-shadow(0 28px 42px rgba(2, 8, 24, .34)) drop-shadow(0 0 38px rgba(98,216,242,.16));
+}
+.conference-globe {
+  object-fit: contain !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  mix-blend-mode: screen;
+}
+
+/* ===== Final pass: larger transparent globe and a richer, more distributed atmosphere ===== */
+.home-globe {
+  display: block !important;
+  width: min(100%, 520px) !important;
+  align-self: center;
+  justify-self: end;
+  position: relative;
+}
+.conference-globe {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 22px 32px rgba(238,75,216,.18)) drop-shadow(0 0 34px rgba(98,216,242,.16));
+}
+@media (max-width: 860px) {
+  .home-globe { display: block !important; width: min(82vw, 460px) !important; justify-self: center; }
+}
+@media (max-width: 620px) {
+  .home-globe { width: min(92vw, 380px) !important; }
+}
+
+
+/* ===== Conference hero artwork ===== */
+.home-globe {
+  width: min(100%, 560px) !important;
+}
+.conference-globe {
+  mix-blend-mode: normal !important;
+  filter: drop-shadow(0 24px 42px rgba(98, 216, 242, .14))
+          drop-shadow(0 18px 38px rgba(238, 75, 216, .18));
+}
+@media (max-width: 860px) {
+  .home-globe { width: min(90vw, 520px) !important; }
+}
