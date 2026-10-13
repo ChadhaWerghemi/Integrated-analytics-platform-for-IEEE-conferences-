@@ -68,4 +68,4 @@ Open the URL Vite prints (usually `http://localhost:5173`).
 - The Power BI embed URL is set in `frontend/src/pages/HomePage.jsx`. Replace it with your own "Publish to web" link.
 - The API address is set in `frontend/src/lib/api.js`.
 - Attendance averages only include conferences where `has_attendance_data = 1`.
-- Never commit `.env`. It is listed in `.gitignore`.
+
